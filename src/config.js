@@ -8,7 +8,7 @@
  * @since  1.0.0
  */
 
-let config =  require('./config.json');
+let config =  require('../config.json');
 
 const deployment = process.env.NODE_ENV || 'dev';
 
