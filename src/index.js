@@ -7,15 +7,33 @@
  * @since  1.0.0
  */
 const express = require('express');
-const config =  require('./config.js');
+const config =  require('./config');
+const routes = require('./routes');
+const { logger, LogLevel } = require('./logger')
 
 // Create a server
 const app = express();
 
-// TODO: Add middleware
+// Check valid json
+//app.use();
+
+// Add parser (body to JSON)
+app.use((req, resp, next) => {
+    express.json()(req, resp, err => {
+        if (!err) {
+            next();
+            return;
+        }
+        resp.status(400);
+        resp.json({"error":"Invalid JSON"});
+    });
+});
+
+// Add routes
+app.use(config.base_url, routes);
 
 // Start the server
 app.listen(
     config.port,
-    () => console.log(`Server started at port ${config.port}`)
+    () => logger.emit(LogLevel.INFO,`Server started at port ${config.port}`)
 );
