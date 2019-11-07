@@ -11,6 +11,7 @@
 let config =  require('../config.json');
 
 const deployment = process.env.NODE_ENV || 'dev';
+const common = config.common;
 
 if (deployment === 'dev') {
     config = config.dev;
@@ -19,7 +20,7 @@ if (deployment === 'dev') {
 } else {
     throw `Environment variable NODE_ENV has an invalid value: ${deployment}, posible values: dev, production`;
 }
-
+config =  Object.assign(config,common);
 config.port = process.env.PORT || config.port || 80;
 
 module.exports = config;

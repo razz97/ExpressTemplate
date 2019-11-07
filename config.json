@@ -4,7 +4,9 @@
     },
     "production": {
         "port": 80
-        
+    },
+    "common": {
+        "base_url": "/api/v1/"
     }
 }
 
