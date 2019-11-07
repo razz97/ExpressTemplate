@@ -8,19 +8,23 @@
  * @since  1.0.0
  */
 
-let config =  require('../config.json');
+const fullConfig =  require('../config.json');
 
-const deployment = process.env.NODE_ENV || 'dev';
-const common = config.common;
+// Check for produc/dev
+const environment = process.env.NODE_ENV || 'dev';
 
-if (deployment === 'dev') {
-    config = config.dev;
-} else if (deployment === 'production') {
-    config = config.production;
-} else {
-    throw `Environment variable NODE_ENV has an invalid value: ${deployment}, posible values: dev, production`;
+// Make sure environment is correct
+if (environment != 'dev' && environment != 'production') {
+    throw `Environment variable NODE_ENV has an invalid value: ${environment}, 
+           posible values: dev, production`;
 }
-config =  Object.assign(config,common);
+// Initialize config with common values
+let config = fullConfig.common;
+// Merge environment specific values to config
+Object.assign(config,fullConfig[environment]);
+// Make sure port is set, prioritize enviroment variable.
 config.port = process.env.PORT || config.port || 80;
+// Set the environment
+config.environment = environment
 
 module.exports = config;
