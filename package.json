@@ -1,0 +1,18 @@
+{
+  "name": "express-rest-api-template",
+  "version": "1.0.0",
+  "description": "Template of a rest api using node with express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "author": "razz97",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
