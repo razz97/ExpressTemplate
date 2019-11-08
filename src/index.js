@@ -6,34 +6,31 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-const express = require('express');
 const config =  require('./config');
-const routes = require('./routes');
-const { logger, LogLevel } = require('./logger')
+const express = require('express');
+const router = require('./router');
+const logger = require('./logger');
+const { logRequest, handleParseError } = require('./autoload').middleware;
 
 // Create a server
 const app = express();
 
-// Check valid json
-//app.use();
+// Middleware
 
-// Add parser (body to JSON)
-app.use((req, resp, next) => {
-    express.json()(req, resp, err => {
-        if (!err) {
-            next();
-            return;
-        }
-        resp.status(400);
-        resp.json({"error":"Invalid JSON"});
-    });
-});
+// Logs the request
+app.use(logRequest);
 
-// Add routes
-app.use(config.base_url, routes);
+// Parses body to JSON)
+app.use(express.json());
+
+// Handles parsing errors
+app.use(handleParseError);
+
+// Adds the routes
+app.use(config.base_url, router);
 
 // Start the server
 app.listen(
     config.port,
-    () => logger.emit(LogLevel.INFO,`Server started at port ${config.port}`)
+    () => logger.info(`Server started at port ${config.port}`)
 );
