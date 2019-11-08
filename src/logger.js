@@ -1,43 +1,36 @@
-const EventEmitter = require('events');
-const { curDate } = require('./utils');
+/**
+ * Responsible for logging messages to the console.
+ * 
+ * This file is responsible of formatting and logging messages to the console, 
+ * it exports an object with info, debug, warn, and error methods.
+ * 
+ * @author Alex Bou.
+ * @since  1.0.0
+ */
+
+const { curDate } = require('./autoload').utils;
 const config = require('./config');
 
-const LogLevel = {
-    INFO: 'INFO',
-    WARN: 'WARN',
-    ERROR: 'ERROR',
-    DEBUG: 'DEBUG'
-};
-const Colors = {
-    WARN: '\x1b[33m%s\x1b[0m',
-    ERROR: '\x1b[31m%s\x1b[0m'
-}
+// Colors
+const WARN = '\x1b[33m%s\x1b[0m';
+const ERROR = '\x1b[31m%s\x1b[0m';
 
-const composeLog = (level, msg) => curDate() + ' - ' + level + ': ' + msg;
+// Function to compose output
+const compose =  (level, msg) => `[${curDate()} - ${level}] ${msg}`;
 
-const logger = new EventEmitter();
+class Logger {
 
-logger.on(LogLevel.INFO, (msg) => console.info(composeLog(LogLevel.INFO,msg)));
-
-logger.on(LogLevel.WARN, (msg) => console.warn(Colors.WARN,composeLog(LogLevel.WARN,msg)));
-
-logger.on(LogLevel.ERROR, (msg) => console.error(Colors.ERROR,composeLog(LogLevel.ERROR,msg)));
-
-logger.on(LogLevel.DEBUG, (msg) => {
-    if (config.environment == 'dev') {
-        console.debug(logger.composeLog(LogLevel.DEBUG,msg));
+    constructor() {
+        // Declare logging functions
+        this.info = (msg) => console.log(compose('INFO ',msg));
+        this.warn = (msg) => console.log(WARN, compose('WARN ',msg));
+        this.error = (msg) => console.log(ERROR, compose('ERROR',msg));
+        // If debug mode isn't explicitly set to true, debug function shouldn't do anything
+        this.debug = config.debug === true
+                        ? (msg) => console.log(compose('DEBUG',msg)) 
+                        : (msg) => {};
     }
-});
 
-module.exports = {
-    logger,
-    LogLevel
 }
 
-
-
-
-
-
-
-
+module.exports = new Logger();
