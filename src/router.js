@@ -17,6 +17,6 @@ router.get('/sample-route', (req,resp) => resp.json({"Hello": "World"}));
 router.get('/sample-route1', (req,resp) => resp.json({"Hello": "World"}));
 
 // Log routes
-logRoutes(config.base_url, router, logger);
+logRoutes(router,config.base_url,logger);
 
 module.exports = router;

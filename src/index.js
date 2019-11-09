@@ -8,8 +8,8 @@
  */
 const config =  require('./config');
 const express = require('express');
-const router = require('./router');
 const logger = require('./logger');
+const router = require('./router');
 const { logRequest, handleParseError } = require('./autoload').middleware;
 
 // Create a server
@@ -18,13 +18,13 @@ const app = express();
 // Middleware
 
 // Logs the request
-app.use(logRequest);
+app.use(logRequest(logger));
 
 // Parses body to JSON)
 app.use(express.json());
 
 // Handles parsing errors
-app.use(handleParseError);
+app.use(handleParseError(logger));
 
 // Adds the routes
 app.use(config.base_url, router);
