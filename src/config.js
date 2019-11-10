@@ -8,7 +8,7 @@
  * @since  1.0.0
  */
 
- const fullConfig =  require('../config.json');
+const fullConfig =  require('../config.json');
 
 // Check for produc/dev
 const environment = process.env.NODE_ENV || 'dev';

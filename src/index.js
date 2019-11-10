@@ -6,31 +6,27 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-const config =  require('./config');
+const {  base_url, port } =  require('./config');
+const { logRequest, handleParseError, exec } = require('./autoload');
 const express = require('express');
-const logger = require('./logger');
+const log = require('./logger');
 const router = require('./router');
-const { logRequest, handleParseError } = require('./autoload').middleware;
+const database = require('./db');
 
-// Create a server
-const app = express();
-
-// Middleware
-
-// Logs the request
-app.use(logRequest(logger));
-
-// Parses body to JSON)
-app.use(express.json());
-
-// Handles parsing errors
-app.use(handleParseError(logger));
-
-// Adds the routes
-app.use(config.base_url, router);
-
-// Start the server
-app.listen(
-    config.port,
-    () => logger.info(`Server started at port ${config.port}`)
-);
+// Code is wrapped in async function to be able to wait for db connection before starting the server
+exec(async () => {
+    // Connect to db
+    await database.connect();
+    // Create a server
+    const app = express();
+    // Logs the request
+    app.use(logRequest);
+    // Parses body to JSON)
+    app.use(express.json());
+    // Handles parsing errors
+    app.use(handleParseError);
+    // Adds the routes
+    app.use(base_url, router);
+    // Start the server
+    app.listen(port,() => log.info(`Server started at port ${port}`));
+});

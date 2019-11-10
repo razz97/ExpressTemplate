@@ -8,6 +8,7 @@
  */
 
 const config =  require('./config');
+require('./logger');
 const path = require('path');
 const fs = require('fs');
 
@@ -30,36 +31,22 @@ function dynamicExports(folder) {
     });
 
     // Handle files, first remove extensions
-    files.map((file) => file.replace(/\.[^/.]+$/, ""))
+    files.map((file) => file.replace(/\.[^/.]+$/, ''))
         // Require and build exports
         .forEach((fileName) => {
-            let exportedFromFile = require("./" + folder + '/' + fileName);
-            buildExports(exportedFromFile, result, fileName);            
+            let exportedFromFile = require.main.require("./" + folder + '/' + fileName);
+            result[fileName.replace('.','_')] = exportedFromFile;         
         });
 
     // For each folder call itself and store result in property
-    folders.forEach((folder) => {
-        result[folder] = dynamicExports(path.join(dir,folder))
+    folders.forEach((nestedFolder) => {
+        Object.assign(result, dynamicExports(path.join(folder,nestedFolder)));
     })
     
     return result;
 }
 
-function buildExports(exportedFromFile, Exports, fileName) {
-
-    // If null or undefined return
-    if (!exportedFromFile) return;
-
-    // If object call itself foreach key
-    if (typeof exportedFromFile === 'object') {
-        for (let key in exportedFromFile) 
-            buildExports(exportedFromFile[key], Exports, key);
-
-    // Else add to exports
-    } else Exports[fileName] = exportedFromFile;
-}
-
 // All autoloaded modules will be exported here
 config.autoExport.forEach(folder => {
-    module.exports[folder] = dynamicExports(folder);
+    Object.assign(module.exports, dynamicExports(folder));
 });

@@ -7,16 +7,20 @@
 const express = require('express');
 const config =  require('./config');
 const logger = require('./logger');
-const { logRoutes } = require('./autoload').utils;
+const all = require('./autoload');
 
 // Create a router
 const router = express.Router();
 
 // Declare routes
-router.get('/sample-route', (req,resp) => resp.json({"Hello": "World"}));
-router.get('/sample-route1', (req,resp) => resp.json({"Hello": "World"}));
+router.route('/sample')
+   .get(all.sample_controller.get)
+   .post(all.sample_controller.post)
+   .put(all.sample_controller.put)
+   .delete(all.sample_controller.delete);
+
 
 // Log routes
-logRoutes(router,config.base_url,logger);
+all.logRoutes(router,config.base_url,logger);
 
 module.exports = router;

@@ -8,8 +8,17 @@
         "debug": false
     },
     "common": {
-        "autoExport": ["middleware","utils"],
-        "base_url": "/api/v1"
+        "autoExport": ["middleware","utils", "components"],
+        "base_url": "/api/v1",
+        "database": {
+            "username":"sample",
+            "password":"123",
+            "passwordEncripted":"true",
+            "protocol":"mongodb://",
+            "host":"localhost",
+            "port":"27017",
+            "schema":"sample"
+        }
     }
 }
 

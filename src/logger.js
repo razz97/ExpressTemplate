@@ -8,7 +8,6 @@
  * @since  1.0.0
  */
 
-const { curDate } = require('./autoload').utils;
 const config = require('./config');
 
 // Colors
@@ -16,7 +15,21 @@ const WARN = '\x1b[33m%s\x1b[0m';
 const ERROR = '\x1b[31m%s\x1b[0m';
 
 // Function to compose output
-const compose =  (level, msg) => `[${curDate()} - ${level}] ${msg}`;
+const compose = (level, msg) => {
+    const today = new Date();
+    // Format it to 'dd/mm/yyyy hh:mm:ss'
+    const formatted = twoDigits(today.getDate()) + '/' +
+            twoDigits(today.getMonth() + 1) + '/' +
+            today.getFullYear() + ' ' +
+            twoDigits(today.getHours()) + ':' + 
+            twoDigits(today.getMinutes()) + ':' + 
+            twoDigits(today.getSeconds());
+    return `[${formatted} - ${level}] ${msg}`;
+}
+
+// Function to force two digits on a number
+const twoDigits = (number) => ('0' + number).slice(-2);
+
 
 class Logger {
 
