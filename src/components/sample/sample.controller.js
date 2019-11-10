@@ -1,3 +1,12 @@
+/**
+ * Responsible handling requests made to /sample.
+ * 
+ * Provides an example of how a real application made with this template 
+ * would implement a controller
+ *  
+ * @author Alex Bou.
+ * @since  1.0.0
+ */
 
 const service = require('./sample.service');
 
@@ -9,22 +18,21 @@ class SampleController {
         next();
     }
 
-    post = (req,res, next) => {
-        service.create(req.body)
-            .then(() => {
-                res.status(201).send();  
-                next();
-            }).catch((err) => res.status(500).json(err));
-       
-    }
-
-    put = (req,res, next) => {
-        res.json({"hi": "there"});
+    post = async (req,res, next) => {
+        await service.create(req.body).catch(err => res.status(500).json(err));
+        res.status(201).send();
         next();
     }
 
-    delete = (req,res, next) => {
-        res.json({"hi": "there"});
+    put = async (req,res, next) => {
+        await service.update(req.body).catch(err => res.status(500).json(err));
+        res.status(200).send();
+        next();
+    }
+
+    delete = async (req,res,next) => {
+        await service.delete(req.param.id).catch(err => res.status(500).json(err));
+        res.status(200).send();
         next();
     }
     

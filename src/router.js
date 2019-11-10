@@ -4,23 +4,23 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-const express = require('express');
-const config =  require('./config');
-const logger = require('./logger');
-const all = require('./autoload');
 
-// Create a router
+const express = require('express');
+const { base_url } =  require('./config');
+const logger = require('./logger');
+const autoload = require('./utils/autoload');
+const { sample } = autoload('components','controller');
+const { logRoutes } = autoload('utils');
+
 const router = express.Router();
 
-// Declare routes
 router.route('/sample')
-   .get(all.sample_controller.get)
-   .post(all.sample_controller.post)
-   .put(all.sample_controller.put)
-   .delete(all.sample_controller.delete);
+   .get(sample.get)
+   .post(sample.post)
+   .put(sample.put)
+   .delete(sample.delete);
 
 
-// Log routes
-all.logRoutes(router,config.base_url,logger);
+logRoutes(router, base_url, logger);
 
 module.exports = router;

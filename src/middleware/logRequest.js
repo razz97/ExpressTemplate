@@ -4,8 +4,7 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-
- const logger = require('../logger');
+const logger = require('../logger');
 
 function logRequest(req, res, next) {
     logger.info(req.method + ' ' + req.path);

@@ -1,3 +1,9 @@
+/**
+ * Responsible for configuring and opening a database connection
+ *  
+ * @author Alex Bou.
+ * @since  1.0.0
+ */
 
 const config = require('./config').database;
 const logger = require('./logger');
@@ -25,24 +31,4 @@ const connect = async () => {
     logger.debug('Mongodb url is: ' + url);
 };
 
-
 module.exports = { connect };
-
-
-
-
-
-function connected() {
-    // var kittySchema = new mongoose.Schema({
-    //     name: String
-    // });
-    // var Kitten = mongoose.model('Kitten', kittySchema);
-    // var silence = new Kitten({ name: 'Silence' });
-    // console.log(silence.name); // 'Silence'
-    // silence.save((err) => {
-    //     if (err) logger.error(err);
-    //     else logger.info('silence saved!');
-    // })
-}
-
-

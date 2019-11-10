@@ -4,11 +4,10 @@
         "debug": true
     },
     "production": {
-        "port": 8080,
+        "port": 80,
         "debug": false
     },
     "common": {
-        "autoExport": ["middleware","utils", "components"],
         "base_url": "/api/v1",
         "database": {
             "username":"sample",

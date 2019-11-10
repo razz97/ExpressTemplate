@@ -10,33 +10,23 @@
 
 const fullConfig =  require('../config.json');
 
-// Check for produc/dev
 const environment = process.env.NODE_ENV || 'dev';
 
-// Make sure environment is correct
 if (environment != 'dev' && environment != 'production') {
-    throw `Environment variable NODE_ENV has an invalid value: ${environment}, 
-           posible values: dev, production`;
+    module.exports = { debug: false };
+    const logger = require('./logger');
+    logger.error(`Environment variable NODE_ENV has an invalid value: ${environment}`);
+    logger.error(`Posible values: dev, production`);
+    process.exit();
 }
 
-// Initialize config with common values
 let config = fullConfig.common;
-
-// Merge environment specific values to config
 Object.assign(config,fullConfig[environment]);
-
-// Make sure port is set, prioritize enviroment variable.
 config.port = process.env.PORT || config.port || 80;
-
-// Make sure base_url is set
 config.base_url = config.base_url || '/';
+config.environment = environment;
 
-// Set the environment
-config.environment = environment
-
-// Export configuration
 module.exports = config;
 
-// Log success and inform environment
 const logger = require('./logger');
 logger.info(`Config succesfully loaded with environment: ${environment}`);
