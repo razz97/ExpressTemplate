@@ -18,6 +18,11 @@ class SampleService {
     async create(hi) {
         return new SampleModel(hi).save();
     }
+
+    async findById(id) {
+        throw '';
+        return await SampleModel.findById(id);
+    }
 }
 
 

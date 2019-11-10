@@ -8,13 +8,14 @@
  * @since  1.0.0
  */
 
+
 const fullConfig =  require('../config.json');
 
 const environment = process.env.NODE_ENV || 'dev';
 
 if (environment != 'dev' && environment != 'production') {
     module.exports = { debug: false };
-    const logger = require('./logger');
+    const logger = require('./utils/logger');
     logger.error(`Environment variable NODE_ENV has an invalid value: ${environment}`);
     logger.error(`Posible values: dev, production`);
     process.exit();
@@ -28,5 +29,5 @@ config.environment = environment;
 
 module.exports = config;
 
-const logger = require('./logger');
+const { logger } = autoload('utils');
 logger.info(`Config succesfully loaded with environment: ${environment}`);

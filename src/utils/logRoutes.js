@@ -4,7 +4,7 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-const logger = require('../logger');
+const { logger } = autoload('utils');
 
 function logRoutes(router,base_url) {
     router.stack.forEach((layer) => {

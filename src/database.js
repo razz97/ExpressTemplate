@@ -6,7 +6,7 @@
  */
 
 const config = require('./config').database;
-const logger = require('./logger');
+const { logger } = autoload('utils');
 const mongoose = require('mongoose');
 
 const url = config.protocol + 

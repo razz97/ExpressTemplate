@@ -8,7 +8,7 @@
  * @since  1.0.0
  */
 
-const config = require('./config');
+const config = require('../config');
 const path = require('path');
 
 // Colors
@@ -30,7 +30,7 @@ class Logger {
 // Function to compose messages, adds date and log level,
 // if debug is enabled, composes file and line as well
 const compose = config.debug === true  
-    ? (level, msg) => `[${curDate()} - ${level} - ${file()}${ifNotNull(func())}: ${line()}] ${msg}`
+    ? (level, msg) => `[${curDate()} - ${level} - ${file()}: ${line()}] ${msg}`
     : (level, msg) => `[${curDate()} - ${level}] ${msg}`
 
 // Gets current date in the format: 'dd/mm/yyyy hh:mm:ss'
@@ -42,13 +42,6 @@ const curDate = () => {
             twoDigits(today.getHours()) + ':' + 
             twoDigits(today.getMinutes()) + ':' + 
             twoDigits(today.getSeconds());
-}
-
-// If string exists return it with a comma, else return empty string
-const ifNotNull = (str) => {
-    if (str)
-        return ', ' + str;
-    return '';
 }
 
 // Function to force two digits on a number
@@ -76,11 +69,8 @@ const stack = () => {
     stack.shift();
     return stack;
 }
-    
 // Gets the line where logger was called
 const line = () => stack()[1].getLineNumber();
-// Gets the function where the logger was called
-const func = () => stack()[1].getFunctionName();
 // Gets the file where the logger was called
 const file = () => path.parse(stack()[1].getFileName()).name;
     

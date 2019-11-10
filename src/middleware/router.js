@@ -6,20 +6,20 @@
  */
 
 const express = require('express');
-const { base_url } =  require('./config');
-const logger = require('./logger');
-const autoload = require('./utils/autoload');
+const { base_url } =  require('../config');
 const { sample } = autoload('components','controller');
-const { logRoutes } = autoload('utils');
+const { logRoutes, logger } = autoload('utils');
 
 const router = express.Router();
 
 router.route('/sample')
-   .get(sample.get)
+   .get(sample.all)
+
+router.route('/sample/:id')
+   .get(sample.one)
    .post(sample.post)
    .put(sample.put)
    .delete(sample.delete);
-
 
 logRoutes(router, base_url, logger);
 

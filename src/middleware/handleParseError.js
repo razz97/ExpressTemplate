@@ -4,7 +4,7 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-const logger = require('../logger');
+const { logger } = autoload('utils');
 
 function  handleParseError(err, req, resp, next) {
     logger.error('Error while parsing JSON: ' + err.message);

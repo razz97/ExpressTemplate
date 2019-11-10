@@ -6,16 +6,18 @@
  * @author Alex Bou.
  * @since  1.0.0
  */
-const {  base_url, port } =  require('./config');
-const { logRequest, handleParseError } = require('./utils/autoload')('middleware');
-const { exec } = require('./utils/autoload')('utils');
+
+// First thing is to make autoloader function global
+global.autoload = require('./autoload');
+
+const { base_url, port } =  require('./config');
+const { logRequest, handleParseError, router } = autoload('middleware');
+const { exec, logger } = autoload('utils');
 const express = require('express');
-const log = require('./logger');
-const router = require('./router');
 const database = require('./database');
 
-// Code is wrapped in async function to be able to await for any async 
-// function before starting the server without nesting promises results
+// Code is wrapped in async function to be able to wait any promise before 
+// starting the server, avoiding nesting promises
 exec(async () => {
     await database.connect();
     const app = express();
@@ -23,5 +25,5 @@ exec(async () => {
     app.use(express.json());
     app.use(handleParseError);
     app.use(base_url, router);
-    app.listen(port,() => log.info(`Server started at port ${port}`));
+    app.listen(port,() => logger.info(`Server started at port ${port}`));
 });

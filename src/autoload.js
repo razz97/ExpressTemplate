@@ -9,7 +9,6 @@
 
 const path = require('path');
 const fs = require('fs');
-const logger = require('../logger');
 
 const extensionRegex = /\.[^/.]+$/;
 
@@ -85,20 +84,7 @@ const getGroupedContents = (folder) => {
 const folderCache = [];
 const typedCache = [];
 
-const isCached = (folder, type) => {
-    if (type) {
-        if (typedCache[folder + '-' + type]) {
-            logger.debug('Autoloader typed cache hit: ' + folder + '-' + type);
-            return true;
-        }
-        return false;
-    }
-    if (folderCache[folder]) {
-        logger.debug('Autoloader cache hit: ' + folder);
-        return true;
-    }
-    return false;
-} 
+const isCached = (folder, type) => (type && typedCache[folder + '-' + type]) || folderCache[folder];
 
 const cache = (folder, result, type) => {
     if (type)
