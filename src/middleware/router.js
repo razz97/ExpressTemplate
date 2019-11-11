@@ -14,10 +14,10 @@ const router = express.Router();
 
 router.route('/sample')
    .get(sample.all)
+   .post(sample.post);
 
 router.route('/sample/:id')
    .get(sample.one)
-   .post(sample.post)
    .put(sample.put)
    .delete(sample.delete);
 

@@ -22,6 +22,6 @@ const opts = {
 }
 
 const sampleSchema = new mongoose.Schema(attrs,opts);
-const Sample = mongoose.model('Sample', sampleSchema);
+const SampleModel = mongoose.model('Sample', sampleSchema);
 
-module.exports = Sample;
+module.exports = { SampleModel, attrs };

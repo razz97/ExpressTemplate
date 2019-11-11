@@ -11,44 +11,51 @@
 const service = require('./sample.service');
 const { logger } = autoload('utils');
 
+
+const error = (res, err) => {
+    logger.error(err.message);
+    res.status(err.status).json({error: err.message});
+}
+
+const success = (res, content, status, next) => {
+    res.status(status)
+    if (content) res.json(content);
+    else res.send();
+    logger.debug('Request finished successfully');
+    next();
+}
+
 class SampleController {
 
     all = (req, res, next) => {
-        service.find()
-            .then(results => {
-                res.json(results);
-                logger.debug('Request finished successfully');
-                next();
-            })
-            .catch(err => {
-                logger.error(err);
-                res.status(500).json({error: 'Unexpected error while handling request'});
-                res.send();
-            });
+        service.find(req.query)
+            .then(results => success(res, results, 200, next))
+            .catch(err => error(res, err));
     }
 
-    one = async (req, res, next) => {
-        const samples = await service.findById(req.params.id).catch(err => console.log(err));
-        res.json(samples);
-        next();
+    one = (req, res, next) => {
+        service.findById(req.params.id)
+            .then(results => success(res, results, 200, next))
+            .catch(err => error(res, err));
+
     }
 
-    post = async (req, res, next) => {
-        await service.create(req.body).catch(err => res.status(500).json(err));
-        res.status(201).send();
-        next();
+    post = (req, res, next) => {
+        service.create(req.body)
+            .then(() => success(res, false, 201, next))
+            .catch(err => error(res, err));
     }
 
-    put = async (req, res, next) => {
-        await service.update(req.body).catch(err => res.status(500).json(err));
-        res.status(200).send();
-        next();
+    put = (req, res, next) => {
+        service.update(req.params.id,req.body)
+            .then(() => success(res, false, 204, next))
+            .catch(err => error(res, err));
     }
 
-    delete = async (req, res, next) => {
-        await service.delete(req.param.id).catch(err => res.status(500).json(err));
-        res.status(200).send();
-        next();
+    delete = (req, res, next) => {
+        service.delete(req.params.id)
+            .then(() => success(res, false, 204, next))
+            .catch(err => error(res, err));
     }
     
 }
